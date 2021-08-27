@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@smallwei/avue": "^2.8.20",
-        "ant-design-vue": "^1.7.7",
+        "axios": "^0.21.1",
         "core-js": "^3.11.0",
         "deep-clone": "^3.0.3",
         "element-ui": "^2.15.5",

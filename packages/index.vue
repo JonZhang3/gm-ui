@@ -116,20 +116,19 @@
                         <el-button v-if="toolbar.includes('save')"
                                    type="text"
                                    size="medium"
-                                   icon="el-icon-success">完成</el-button>
+                                   icon="el-icon-success"
+                                   @click="handleGenerate">完成</el-button>
                         <el-button v-if="toolbar.includes('preview')"
                                    type="text"
                                    size="medium"
                                    icon="el-icon-view"
-                                   @click="handlePreview">预览
-                        </el-button>
+                                   @click="handlePreview">预览</el-button>
                         <el-button v-if="toolbar.includes('clear')"
                                    class="danger"
                                    type="text"
                                    size="medium"
                                    icon="el-icon-delete"
-                                   @click="handleClear">清空
-                        </el-button>
+                                   @click="handleClear">清空</el-button>
                         <slot name="toolbar"></slot>
                     </div>
                 </el-header>
@@ -249,8 +248,7 @@
                                    type="primary"
                                    @click="handleCopy"
                                    slot="reference"
-                                   style="margin-left: 10px;">复制
-                        </el-button>
+                                   style="margin-left: 10px;">复制</el-button>
                     </el-popover>
                 </div>
             </el-drawer>
@@ -260,21 +258,15 @@
                        size="60%"
                        append-to-body
                        :before-close="handleBeforeClose">
-                <avue-form v-if="previewVisible"
-                           ref="form"
-                           class="preview-form"
+                <avue-form v-if="previewVisible" ref="form" class="preview-form"
                            :option="widgetFormPreview"
                            v-model="widgetModels"
                            @submit="handlePreviewSubmit"></avue-form>
                 <div class="drawer-foot">
-                    <el-button size="medium"
-                               type="primary"
-                               @click="handlePreviewSubmit">确定
-                    </el-button>
-                    <el-button size="medium"
-                               type="danger"
-                               @click="handleBeforeClose">取消
-                    </el-button>
+                    <el-button size="medium" type="primary"
+                               @click="handlePreviewSubmit">确定</el-button>
+                    <el-button size="medium" type="danger"
+                               @click="handleBeforeClose">取消</el-button>
                 </div>
             </el-drawer>
         </el-container>
