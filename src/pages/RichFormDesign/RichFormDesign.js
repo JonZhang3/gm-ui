@@ -1,14 +1,13 @@
 import Vue from 'vue';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import Avue from '@smallwei/avue';
-import '@smallwei/avue/lib/index.css';
+import AvueUeditor from 'avue-plugin-ueditor'
+
 import AvueFormDesign from '../../../packages';
 import App from "./App";
 
-Vue.use(ElementUI);
-Vue.use(Avue);
+Vue.use(window.ELEMENT);
+Vue.use(window.AVUE);
 Vue.use(AvueFormDesign);
+Vue.use(AvueUeditor);
 
 Vue.config.productionTip = false
 

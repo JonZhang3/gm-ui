@@ -4,6 +4,12 @@
             <!-- 左侧字段 -->
             <el-aside :width="leftWidth">
                 <div class="fields-list">
+                    <template v-if="queryParams && queryParams.length > 0">
+                        <div class="field-title">请求参数</div>
+                        <div v-for="(item, index) in queryParams" :key="index" style="padding: 2px 0 2px 10px">
+                            <span>{{item}}</span>
+                        </div>
+                    </template>
                     <template v-if="customFields && customFields.length > 0">
                         <template
                             v-if="customFields[0].title && customFields[0].list && customFields[0].list.length > 0">
@@ -292,6 +298,9 @@ export default {
     components: {Draggable, MonacoEditor, WidgetForm, FormConfig, WidgetConfig},
     mixins: [history],
     props: {
+        queryParams: {
+            type: Array,
+        },
         options: {
             type: [Object, String],
             default: () => {
@@ -344,6 +353,9 @@ export default {
         defaultValues: {
             type: Object
         },
+        initJsonData: {
+            type: Object
+        }
     },
     watch: {
         options: {
@@ -421,6 +433,17 @@ export default {
     mounted() {
         this.handleLoadStorage()
         this.handleLoadCss()
+        if(this.initJsonData) {
+            try {
+                this.transAvueOptionsToFormDesigner(this.initJsonData).then(res => {
+                    this.widgetForm = res
+                    this.importJsonVisible = false
+                    this.handleHistoryChange(this.widgetForm)
+                })
+            } catch (e) {
+                this.$message.error(e.message)
+            }
+        }
     },
     methods: {
         // 组件初始化时加载本地存储中的options(需开启storage),若不存在则读取用户配置的options

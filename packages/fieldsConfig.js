@@ -128,23 +128,20 @@ export default [
         value: 'value'
       }
     }, {
-      type: 'select',
-      label: '下拉选择器',
-      icon: 'icon-select',
-      dicData: [
-        { label: '选项一', value: '0' },
-        { label: '选项二', value: '1' },
-        { label: '选项三', value: '2' },
-      ],
-      // 用于做级联配置
-      cascaderItem: [],
-      span: 24,
-      display: true,
-      dicOption: 'static',
-      props: {
-        label: 'label',
-        value: 'value'
-      }
+        type: 'select',
+        label: '下拉选择器',
+        cascaderItem: [],
+        span: 24,
+        display: true,
+        props: {
+            label: 'text',
+            value: 'value'
+        },
+        dicUrl: '/businessDS/getBdItems?id=',
+        dicMethod: 'get',
+        dicOptionOther: 'builtin',
+        builtinId: null,
+        selectUrl: '/businessDS/getBds',
     }, {
       type: 'cascader',
       label: '级联选择器',

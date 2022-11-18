@@ -10,12 +10,9 @@
             <label class="el-form-item__label"
                    style="padding: 0;">字典配置：</label>
             <div class="el-form-item__content">
-                <el-tabs v-model="data.dicOption"
+                <el-tabs v-model="data.dicOptionOther"
                          stretch
                          @tab-click="handleTabClick">
-                    <el-tab-pane label="内置数据" name="builtin">
-
-                    </el-tab-pane>
                     <el-tab-pane label="静态数据"
                                  name="static">
                         <draggable tag="ul"
@@ -77,6 +74,11 @@
                                           :children="option"></avue-dynamic>
                         </p>
                     </el-tab-pane>
+                    <el-tab-pane label="内置数据" name="builtin">
+                        <el-select v-model="data.builtinId" @change="handleBuiltinSelectChange">
+                            <el-option v-for="(item, index) in builtinData" :key="index" :value="item.id" :label="item.bdsName"></el-option>
+                        </el-select>
+                    </el-tab-pane>
                 </el-tabs>
             </div>
         </div>
@@ -96,7 +98,7 @@
                 </ul>
             </div>
         </div>
-        <el-form-item v-if="data.dicOption == 'remote'"
+        <el-form-item v-if="data.dicOptionOther == 'remote'"
                       label="重新请求字典(crud)"
                       label-width="150px">
             <el-switch v-model="data.dicFlag"></el-switch>
@@ -153,8 +155,7 @@
                     </draggable>
                     <div style="margin-left: 22px;">
                         <el-button type="text"
-                                   @click="handleAddCascaderItemFields">添加列
-                        </el-button>
+                                   @click="handleAddCascaderItemFields">添加列</el-button>
                     </div>
                 </div>
             </div>
@@ -208,11 +209,12 @@
 
 <script>
 import Draggable from 'vuedraggable'
+import axios from 'axios';
 
 export default {
     name: "config-select",
     props: ['data'],
-    components: {Draggable},
+    components: { Draggable },
     data() {
         return {
             validator: {
@@ -221,6 +223,7 @@ export default {
                 pattern: null,
                 length: null
             },
+            builtinData: [],
             option: {
                 column: [{
                     type: 'input',
@@ -234,7 +237,24 @@ export default {
             },
         }
     },
+    mounted() {
+        axios.get(this.data.selectUrl).then(resp => {
+            this.builtinData = resp.data;
+        });
+    },
     methods: {
+        handleBuiltinSelectChange(val) {
+            this.data.dicUrl = '/businessDS/getBdsItems?id=' + val;
+            this.data.dicMethod = 'get';
+            this.data.dicOptionOther = 'builtin';
+            // axios.get('/businessDS/getBdsItems?id=' + val).then(resp => {
+            //     if(resp.data.code === 101) {
+            //         this.$message.error('发生错误，请重新选择');
+            //     } else {
+            //         this.data.dicData = resp.data;
+            //     }
+            // });
+        },
         generateRule() {
             const rules = [];
             Object.keys(this.validator).forEach(key => {
@@ -247,7 +267,7 @@ export default {
         },
         handleAddFields() {
             const i = Math.ceil(Math.random() * 99999)
-            this.data.dicData.push({label: `字段${i}`, value: `col_${i}`})
+            this.data.dicData.push({ label: `字段${i}`, value: `col_${i}` })
         },
         handleRemoveCascaderItemFields(index) {
             this.data.cascaderItem.splice(index, 1)
@@ -255,13 +275,14 @@ export default {
         handleAddCascaderItemFields() {
             this.data.cascaderItem.push('')
         },
-        handleTabClick({name}) {
-            if (name == 'remote' && !this.data.dicQueryConfig) this.data.dicQueryConfig = []
+        handleTabClick({ name }) {
+            this.data.dicOptionOther = name;
+            if (name === 'remote' && !this.data.dicQueryConfig) this.data.dicQueryConfig = []
         }
     },
     watch: {
         'data.required': function (val) {
-            if (val) this.validator.required = {required: true, message: `请选择${this.data.label}`}
+            if (val) this.validator.required = { required: true, message: `请选择${this.data.label}` }
             else this.validator.required = null
 
             this.generateRule()
