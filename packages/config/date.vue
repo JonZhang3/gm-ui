@@ -45,6 +45,9 @@
         <el-form-item label="是否必填">
             <el-switch v-model="data.required"></el-switch>
         </el-form-item>
+        <el-form-item label="UTC 时间">
+            <el-switch v-model="data.isUtc"></el-switch>
+        </el-form-item>
     </div>
 </template>
 

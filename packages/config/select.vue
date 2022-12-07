@@ -74,9 +74,10 @@
                                           :children="option"></avue-dynamic>
                         </p>
                     </el-tab-pane>
-                    <el-tab-pane label="内置数据" name="builtin">
+                    <el-tab-pane label="内置字典" name="builtin">
                         <el-select v-model="data.builtinId" @change="handleBuiltinSelectChange">
-                            <el-option v-for="(item, index) in builtinData" :key="index" :value="item.id" :label="item.bdsName"></el-option>
+                            <el-option v-for="(item, index) in builtinData" :key="index" :value="item.categoryName"
+                                       :label="item.categoryName + (item.categoryDescription ? ('[' + item.categoryDescription + ']') : '')"></el-option>
                         </el-select>
                     </el-tab-pane>
                 </el-tabs>
@@ -244,7 +245,7 @@ export default {
     },
     methods: {
         handleBuiltinSelectChange(val) {
-            this.data.dicUrl = '/businessDS/getBdsItems?id=' + val;
+            this.data.dicUrl = '/' + window.$currentProductId + '/dataDictionary/listDataByCategoryName?categoryName=' + val;
             this.data.dicMethod = 'get';
             this.data.dicOptionOther = 'builtin';
             // axios.get('/businessDS/getBdsItems?id=' + val).then(resp => {

@@ -134,14 +134,14 @@ export default [
         span: 24,
         display: true,
         props: {
-            label: 'text',
-            value: 'value'
+            label: 'dataText',
+            value: 'dataValue'
         },
         dicUrl: '/businessDS/getBdItems?id=',
         dicMethod: 'get',
         dicOptionOther: 'builtin',
         builtinId: null,
-        selectUrl: '/businessDS/getBds',
+        selectUrl: '/' + window.$currentProductId + '/dataCategory/listAllData',
     }, {
       type: 'cascader',
       label: '级联选择器',
@@ -226,71 +226,89 @@ export default [
       icon: 'icon-year',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'yyyy',
-      valueFormat: 'yyyy'
+      valueFormat: 'yyyy',
+      change: 'handleDateChange',
     }, {
       type: 'month',
       label: '月',
       icon: 'icon-month',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'MM',
-      valueFormat: 'MM'
+      valueFormat: 'MM',
+      change: 'handleDateChange',
     }, {
       type: 'week',
       label: '周',
       icon: 'icon-week',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'yyyy 第 WW 周',
+      change: 'handleDateChange',
     }, {
       type: 'date',
       label: '日期',
       icon: 'icon-date',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'yyyy-MM-dd',
-      valueFormat: 'yyyy-MM-dd'
+      valueFormat: 'yyyy-MM-dd',
+      change: 'handleDateChange',
     }, {
       type: 'time',
       label: '时间',
       icon: 'icon-time',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'HH:mm:ss',
-      valueFormat: 'HH:mm:ss'
+      valueFormat: 'HH:mm:ss',
+      change: 'handleDateChange',
     }, {
       type: 'datetime',
       label: '日期时间',
       icon: 'icon-datetime',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'yyyy-MM-dd HH:mm:ss',
-      valueFormat: 'yyyy-MM-dd HH:mm:ss'
+      valueFormat: 'yyyy-MM-dd HH:mm:ss',
+      change: 'handleDateChange',
     }, {
       type: 'daterange',
       label: '日期范围',
       icon: 'icon-date-range',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'yyyy-MM-dd',
-      valueFormat: 'yyyy-MM-dd'
+      valueFormat: 'yyyy-MM-dd',
+      change: 'handleDateChange',
     }, {
       type: 'timerange',
       label: '时间范围',
       icon: 'icon-time-range',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'HH:mm:ss',
-      valueFormat: 'HH:mm:ss'
+      valueFormat: 'HH:mm:ss',
+      change: 'handleDateChange',
     }, {
       type: 'datetimerange',
       label: '日期时间范围',
       icon: 'icon-datetime-range',
       span: 24,
       display: true,
+      isUtch: false,
       format: 'yyyy-MM-dd HH:mm:ss',
-      valueFormat: 'yyyy-MM-dd HH:mm:ss'
+      valueFormat: 'yyyy-MM-dd HH:mm:ss',
+      change: 'handleDateChange',
     }],
   },
   {

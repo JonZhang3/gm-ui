@@ -28,15 +28,6 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-<!--                    <el-col :span="6">-->
-<!--                        <el-form-item label="业务接口">-->
-<!--                            <el-select v-model="formData.interfaceId" filterable @change="handleInterfaceChange">-->
-<!--                                <el-option v-for="item in interfaces" :value="item.id"-->
-<!--                                           :key="item.id"-->
-<!--                                           :label="`[${item.type === 0 ? 'Read' : 'Write'}] ${item.interfaceName}`"></el-option>-->
-<!--                            </el-select>-->
-<!--                        </el-form-item>-->
-<!--                    </el-col>-->
                 </template>
                 <template v-else-if="formData.citeType === 1">
                     <el-col :span="6">
@@ -96,52 +87,6 @@
                     <el-button type="primary" size="small" @click="handleDesignQueryParamsForm">设计表单</el-button>
                 </el-form-item>
             </el-row>
-<!--            <el-row>-->
-<!--                <el-col>-->
-<!--                    <el-form-item label="返回参数">-->
-<!--                        <el-table :data="formData.paramsReturn">-->
-<!--                            <el-table-column prop="colName" label="参数名">-->
-<!--                                <template slot="header" slot-scope="scope">-->
-<!--                                    <span>参数名</span>-->
-<!--                                    <el-button @click="handleAddReturnParam" type="primary" icon="el-icon-plus" circle size="mini"></el-button>-->
-<!--                                </template>-->
-<!--                                <template v-slot="scope">-->
-<!--                                    <el-input v-model="scope.row.colName"></el-input>-->
-<!--                                </template>-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column prop="displayName" label="展示名">-->
-<!--                                <template slot-scope="scope">-->
-<!--                                    <el-input v-model="formData.paramsReturn[scope.$index].displayName"></el-input>-->
-<!--&lt;!&ndash;                                    <span v-else>{{scope.row.displayName}}</span>&ndash;&gt;-->
-<!--                                </template>-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column prop="dataType" label="数据类型">-->
-<!--                                <template>-->
-<!--                                    <span>文本</span>-->
-<!--                                </template>-->
-<!--                            </el-table-column>-->
-<!--                            <el-table-column prop="displayType" label="列表展示">-->
-<!--                                <template slot-scope="scope">-->
-<!--                                    <el-switch v-if="interfaceType === 0"-->
-<!--                                               v-model="formData.paramsReturn[scope.$index].displayType"-->
-<!--                                               active-value="1" active-text="是"-->
-<!--                                               inactive-value="0" inactive-text="否"></el-switch>-->
-<!--&lt;!&ndash;                                    <span v-else>{{scope.row.displayType === 1 ? '是' : '否'}}</span>&ndash;&gt;-->
-<!--                                </template>-->
-<!--                            </el-table-column>-->
-<!--                        </el-table>-->
-<!--                    </el-form-item>-->
-<!--                </el-col>-->
-<!--            </el-row>-->
-<!--            <el-row>-->
-<!--                <el-col>-->
-<!--                    <el-form-item label="单一对象">-->
-<!--                        <el-switch v-model="formData.singleObject"-->
-<!--                                   active-value="1" inactive-value="0"-->
-<!--                                   active-text="是" inactive-text="否"></el-switch>-->
-<!--                    </el-form-item>-->
-<!--                </el-col>-->
-<!--            </el-row>-->
             <el-row style="padding-bottom: 10px;">
                 <el-col :span="1" style="font-size: 14px;color:#606266;">页面简介：</el-col>
                 <el-col :span="23">
@@ -172,14 +117,58 @@
 <script>
 
 import request from "../../common/request";
+import {handleDateChange} from '../../common/utils';
 
 export default {
     name: 'app',
     data() {
         return {
-            customFields: [],
+            customFields: [
+                {
+                    title: 'UTC日期时间',
+                    component: 'pro-date-time',
+                    span: 24,
+                    params: {
+                        format: 'yyyy-MM-dd HH:mm:ss',
+                        valueFormat: 'yyyy-MM-dd HH:mm:ss',
+                        defaultValue: null,
+                    }
+                },
+                {
+                    title: 'UTC时间',
+                    component: 'pro-time',
+                    span: 24,
+                    params: {
+                        defaultValue: null,
+                    }
+                },
+                {
+                    title: 'UTC时间范围',
+                    component: 'pro-time-range',
+                    span: 24,
+                    params: {
+                        defaultStartValue: '',
+                        defaultEndValue: ''
+                    }
+                },
+                {
+                    title: 'UTC日期时间范围',
+                    component: 'pro-date-time-range',
+                    span: 24,
+                    params: {
+                        format: 'yyyy-MM-dd HH:mm:ss',
+                        valueFormat: 'yyyy-MM-dd HH:mm:ss',
+                        rangeSeparator: '~',
+                        defaultValue: null,
+                        startPlaceholder: "开始日期",
+                        endPlaceholder: "结束日期",
+                        defaultStartValue: '',
+                        defaultEndValue: '',
+                    }
+                }
+            ],
             includeFields: ['group', 'dynamic', 'title', 'input', 'password', 'textarea', 'number', 'radio', 'checkbox',
-                'select', 'year', 'month', 'week', 'date', 'time', 'datetime', 'daterange', 'timerange',
+                'select', 'date', 'time', 'datetime', 'daterange', 'timerange',
                 'datetimerange', 'switch', 'slider'],
             options: {column: []},
             ueditorOptions: {},
@@ -224,7 +213,13 @@ export default {
         }
     },
     mounted() {
-        this.formData.queryFormData = JSON.parse(window.Metadata.model.queryFormContent);
+        this.formData.queryFormData = JSON.parse(window.Metadata.model.queryFormContent, (key, value) => {
+            if(key === 'change' && value === 'handleDateChange') {
+                return handleDateChange;
+            }
+            return value;
+        });
+        console.log(this.formData.queryFormData);
         if(this.formData.queryFormData && this.formData.queryFormData.interface) {
             this.formData.interface = this.formData.queryFormData.interface;
         }
@@ -264,7 +259,12 @@ export default {
                 businessDsId: this.formData.businessDsId,
                 singleObject: this.formData.singleObject,
                 pageRemark: this.formData.pageRemark,
-                queryFormContent: JSON.stringify(this.formData.queryFormData),
+                queryFormContent: JSON.stringify(this.formData.queryFormData, (key, value) => {
+                    if(key === 'change') {
+                        return 'handleDateChange';
+                    }
+                    return value;
+                }),
                 // paramsReturn: JSON.stringify(this.formData.paramsReturn)
             }).then((resp) => {
                 const data = resp.data;

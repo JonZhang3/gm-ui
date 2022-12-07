@@ -1,10 +1,10 @@
 <template>
     <div>
-    <span v-if="item.type == 'title'"
-          :style="item.styles"
-          style="margin-left: 5px;">
-      {{ item.value }}
-    </span>
+        <span v-if="item.type == 'title'"
+                :style="item.styles"
+                style="margin-left: 5px;">
+            {{ item.value }}
+        </span>
         <component v-else
                    :is="getComponent(item.type, item.component)"
                    v-bind="Object.assign(deepClone(item), params, { size:item.size || 'small' })"
@@ -12,8 +12,7 @@
                    :placeholder="item.placeholder || getPlaceholder(item)"
                    :dic="item.dicData"
                    :value="['time', 'timerange', 'checkbox'].includes(item.type) ? item.dicData: undefined">
-      <span v-if="params.html"
-            v-html="params.html"></span>
+            <span v-if="params.html" v-html="params.html"></span>
         </component>
     </div>
 </template>

@@ -12,6 +12,7 @@
 <script>
 
 import request from "../../common/request";
+import {handleDateChange} from '../../common/utils';
 
 export default {
     name: 'app',
@@ -19,7 +20,12 @@ export default {
         return {
             pageRemark: window.Metadata.model.m.pageRemark,
             obj: {},
-            formOptions: JSON.parse(window.Metadata.model.m.queryFormContent)
+            formOptions: JSON.parse(window.Metadata.model.m.queryFormContent, (key, value) => {
+                if(key === 'change' && value === 'handleDateChange') {
+                    return handleDateChange;
+                }
+                return value;
+            })
         }
     },
     methods: {
