@@ -6,6 +6,12 @@
                        @submit="handleSubmit">
             </avue-form>
         </div>
+        <div style="margin-top: 10px">
+            <el-table v-if="resultViewType === 'table'" :data="resultTableData" size="small">
+                <el-table-column v-for="p in resultTableHeaders" :label="p" :prop="p" :key="p"></el-table-column>
+            </el-table>
+            <div v-else-if="resultViewType === 'text'">{{ resultViewText }}</div>
+        </div>
     </div>
 </template>
 
@@ -25,7 +31,11 @@ export default {
                     return handleDateChange;
                 }
                 return value;
-            })
+            }),
+            resultViewType: 'table',// table or text
+            resultViewText: '',
+            resultTableHeaders: [],
+            resultTableData: [],
         }
     },
     methods: {
@@ -46,12 +56,22 @@ export default {
                 }).then(resp => {
                     const data = resp.data;
                     if(data.code === 200) {
-                        if(data.data && Object.keys(data.data).length > 0) {
-                            this.$message.success(data.data.data);
+                        // data.data array or map
+                        if(data.data && data.data.data) {
+                            if(Array.isArray(data.data.data)) {
+                                this.resultViewType = 'table';
+                                if(data.data.data.length > 0) {
+                                    this.resultTableHeaders = Object.keys(data.data.data[0]);
+                                }
+                                this.resultTableData = data.data.data;
+                            } else {
+                                this.resultViewType = 'text';
+                                this.resultViewText = JSON.stringify(data.data.data);
+                            }
                         } else {
                             this.$message.success(data.message);
                         }
-                        this.$refs.form.resetForm();
+                        // this.$refs.form.resetForm();
                     } else {
                         this.$message.error(data.message);
                     }
